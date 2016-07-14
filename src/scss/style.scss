@@ -1,0 +1,12 @@
+/*
+color: gold;    // movil
+color: green;  // tablet
+color: blue;   // desktop
+*/
+
+$mobile-text-color: white;
+
+h1 {
+	color: $mobile-text-color;
+}
+

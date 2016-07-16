@@ -1,12 +1,14 @@
-/*
-color: gold;    // movil
-color: green;  // tablet
-color: blue;   // desktop
-*/
+@import "responsive-utilities";
+@import "reset";
+@import "clearfix";
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,700';
+@import "variables";
+@import "html-tags";
+@import "web-header";
+@import "songs-list";
 
-$mobile-text-color: darkblue;
 
-h1 {
-	color: $mobile-text-color;
-}
+
+
+
 

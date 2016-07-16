@@ -2,10 +2,21 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
 var notify = require('gulp-notify');
+var browserSync = require('browser-sync').create();
 
 // definimos la tarea por defecto
-gulp.task('default', function(){
-	gulp.watch('./src/scss/*.scss', ['compile-sass']);
+gulp.task('default', ["compile-sass"], function(){
+
+	// iniciar BrowserSync
+	browserSync.init({
+		server: "./"  // levanta un servidor web en la carpeta actual
+	});
+
+	// observa cambios en archivos sass y compila automaticamente
+	gulp.watch('src/scss/*.scss', ['compile-sass']);
+
+	// observa cambios en archivos html y recarga el navegador
+	gulp.watch('*.html').on("change", browserSync.reload);
 });
 
 // definimos la tarea para compilar Sass
@@ -16,5 +27,6 @@ gulp.task('compile-sass', function(){
 	.pipe(notify({
 		title: "SASS",
 		message: "Compilado"
-	}));
+	}))
+	.pipe(browserSync.stream());
 });

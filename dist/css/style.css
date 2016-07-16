@@ -1,7 +1,147 @@
-/*
-color: gold;    // movil
-color: green;  // tablet
-color: blue;   // desktop
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
 */
-h1 {
-  color: darkblue; }
+@import 'https://fonts.googleapis.com/css?family=Open+Sans:400,700';
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+.clearfix:before, .songs-list .song:before, .clearfix:after, .songs-list .song:after {
+  content: " ";
+  display: table; }
+
+.clearfix:after, .songs-list .song:after {
+  clear: both; }
+
+body {
+  background: #fff;
+  color: #333;
+  font-family: "Open Sans", sans-serif;
+  font-size: 14px;
+  padding-top: 50px; }
+
+img, embed, object, video {
+  max-width: 100%; }
+
+form {
+  padding: 10px; }
+
+label, input, button, button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box; }
+
+label {
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase; }
+
+input, button {
+  border: 1px solid #8ED7BF;
+  margin: 5px 0px 15px 0px;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 5px; }
+  input:focus, button:focus {
+    outline-color: #8ED7BF;
+    background: #EBEDEA; }
+
+button {
+  background: #8ED7BF;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #1b4b3b;
+  transition: all 0.25s; }
+  button:hover {
+    background: #68caaa; }
+  button:active {
+    background: #43bc94;
+    color: #fff; }
+
+*::selection {
+  background: #FCF3CE; }
+
+.web-header {
+  top: 0px;
+  left: 0px;
+  position: fixed;
+  width: 100%;
+  padding: 15px 0px;
+  background: rgba(142, 215, 191, 0.9);
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase; }
+  .web-header .web-title {
+    font-size: 19px;
+    text-shadow: 2px 2px 0px #359777; }
+
+@media all and (min-width: 737px) {
+  .songs-list {
+    display: flex;
+    flex-wrap: wrap; } }
+
+.songs-list .song {
+  border-bottom: 1px solid #EBEDEA; }
+  @media all and (min-width: 737px) {
+    .songs-list .song {
+      width: calc(20% - 20px);
+      text-align: center;
+      padding: 10px; } }
+  .songs-list .song .cover {
+    width: 60px;
+    float: left;
+    margin-right: 10px; }
+    @media all and (min-width: 737px) {
+      .songs-list .song .cover {
+        width: 100%;
+        margin-bottom: 10px; } }
+  .songs-list .song .artist {
+    margin-top: 15px;
+    font-weight: bold; }
+  .songs-list .song .artist, .songs-list .song .title {
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    height: 16px;
+    padding-right: 20px; }

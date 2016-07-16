@@ -1,0 +1,18 @@
+// Variables
+$web-header-background: $color-sirena;
+$web-header-color: $color-white;
+
+.web-header {
+	top: 0px; left: 0px;
+	position: fixed;
+	width: 100%;
+	padding: 15px 0px;
+	background: fade-out($web-header-background, 0.1);
+	color: $web-header-color;
+	text-align: center;
+	text-transform: uppercase;
+	.web-title {
+		font-size: $font-size-base + 5px;
+		text-shadow: 2px 2px 0px darken($web-header-background, 30%);
+	}
+}

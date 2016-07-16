@@ -3,7 +3,9 @@ var gulp = require('gulp');
 var sass = require('gulp-sass');
 var notify = require('gulp-notify');
 var browserSync = require('browser-sync').create();
-var concat = require('gulp-concat');
+var browserify = require('browserify');
+var tap = require('gulp-tap');
+var buffer = require('gulp-buffer');
 
 // variables de patrones de archivos
 var jsFiles = ["src/js/*.js", "src/js/**/*.js"];
@@ -40,8 +42,11 @@ gulp.task('compile-sass', function(){
 
 // definimos la tarea para concatenar js
 gulp.task("concat-js", function(){
-	gulp.src(jsFiles)
-	.pipe(concat("app.js"))
+	gulp.src("src/js/app.js")
+	.pipe(tap(function(file){  // tap ejecuta un codigo por cada fichero seleccionado en el paso anterior
+		file.contents = browserify(file.path, {debug:true}).bundle();  // pasamos el archivo por browserify para importar los require
+	}))  
+	.pipe(buffer())  // convierte cada archivo en un stream
 	.pipe(gulp.dest("dist/js"))
 	.pipe(notify({
 		title: "JS",

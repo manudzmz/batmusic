@@ -11,6 +11,7 @@ $web-header-color: $color-white;
 	color: $web-header-color;
 	text-align: center;
 	text-transform: uppercase;
+	z-index:1;
 	.web-title {
 		font-size: $font-size-base + 5px;
 		text-shadow: 2px 2px 0px darken($web-header-background, 30%);

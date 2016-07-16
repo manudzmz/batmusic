@@ -7,28 +7,28 @@
 	<link rel="stylesheet" type="text/css" href="dist/css/style.css">
 	<link rel="stylesheet" href="">
 </head>
-<body>
+<body class="form-shown">
 	<header class="web-header">
 		<h1 class="web-title">Batmusic</h1>
 	</header>
 
-	<form novalidate>
-		<label for="artist">Artist</label>
-		<input type="text" id="artist" name="artist" placeholder="Artist" required>
+	<form class="ui-element new-song-form" novalidate>
+		<div><label for="artist">Artist</label>
+		<input type="text" id="artist" name="artist" placeholder="Artist" required></div>
 
-		<label for="title">Title</label>
-		<input type="text" id="title" name="title" placeholder="Song title" required>
+		<div><label for="title">Title</label>
+		<input type="text" id="title" name="title" placeholder="Song title" required></div>
 
-		<label for="audio_url">Audio URL</label>
-		<input type="url" id="audio_url" name="audio_url" placeholder="http://..." required>
+		<div><label for="audio_url">Audio URL</label>
+		<input type="url" id="audio_url" name="audio_url" placeholder="http://..." required></div>
 
-		<label for="cover_url">Cover URL</label>
-		<input type="url" id="cover_url" name="cover_url" placeholder="http://...">
+		<div><label for="cover_url">Cover URL</label>
+		<input type="url" id="cover_url" name="cover_url" placeholder="http://..."></div>
 
 		<button>Save song</button>
 	</form>
 
-	<section class="songs-list">
+	<section class="ui-element songs-list">
 		<article class="song">
 			<img class="cover" src="images/cd.jpg">
 			<div class="artist">Song artist</div>

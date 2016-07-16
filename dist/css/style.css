@@ -64,7 +64,26 @@ img, embed, object, video {
   max-width: 100%; }
 
 form {
-  padding: 10px; }
+  padding: 10px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  top: 0px; }
+  @media all and (min-width: 737px) {
+    form {
+      height: auto;
+      position: relative;
+      flex-flow: row wrap; }
+      form div {
+        width: calc(50% - 10px);
+        margin: auto 5px; }
+      form button {
+        width: 20%; } }
 
 label, input, button, button {
   display: block;
@@ -110,7 +129,8 @@ button {
   background: rgba(142, 215, 191, 0.9);
   color: #fff;
   text-align: center;
-  text-transform: uppercase; }
+  text-transform: uppercase;
+  z-index: 1; }
   .web-header .web-title {
     font-size: 19px;
     text-shadow: 2px 2px 0px #359777; }
@@ -145,3 +165,19 @@ button {
     overflow: hidden;
     height: 16px;
     padding-right: 20px; }
+
+body .ui-element {
+  display: none; }
+
+body.form-shown .new-song-form {
+  display: flex; }
+
+@media all and (min-width: 737px) {
+  body.form-shown .songs-list {
+    display: flex; } }
+
+body.song-list-shown .songs-list {
+  display: block; }
+  @media all and (min-width: 737px) {
+    body.song-list-shown .songs-list {
+      display: flex; } }

@@ -10075,10 +10075,19 @@ return jQuery;
 } );
 
 },{}],2:[function(require,module,exports){
-var form = require("./form.js");
-var songList = require("./song-list.js");
-},{"./form.js":3,"./song-list.js":4}],3:[function(require,module,exports){
+var $ = require("jquery");
+
+$(".add-icon").on('click', function(){
+	$('body').toggleClass('form-shown').toggleClass('song-list-shown');
+});
+},{"jquery":1}],3:[function(require,module,exports){
+require("./form.js");
+require("./add-icon.js");
+require("./init.js");
+
+},{"./add-icon.js":2,"./form.js":4,"./init.js":5}],4:[function(require,module,exports){
 var $ = require('jquery');
+var songList = require("./song-list");
 
 // Al enviar formulario enviamos peticion AJAX para almacenar la cancion
 $('.new-song-form').on('submit', function(){
@@ -10117,6 +10126,7 @@ $('.new-song-form').on('submit', function(){
 			console.log('SUCCESS', response);
 			$("form")[0].reset();  // borramos los campos del formulario
 			$("#artist").focus();  // pongo el foco en el campo artist
+			songList.load();
 		},
 		error: function() {
 			console.log('ERROR', response);
@@ -10129,8 +10139,55 @@ $('.new-song-form').on('submit', function(){
 
 	return false;  // e.preventDefault();
 });
-},{"jquery":1}],4:[function(require,module,exports){
-var $ = require('jquery');
+},{"./song-list":6,"jquery":1}],5:[function(require,module,exports){
+var songList = require("./song-list");
 
-console.log("Song list");
-},{"jquery":1}]},{},[2]);
+// cargamos la lista de canciones
+songList.load();
+},{"./song-list":6}],6:[function(require,module,exports){
+var $ = require('jquery');
+var utils = require('./utils.js');
+
+module.exports = {
+	load: function() {
+		// peticion AJAX para cargar la lista de canciones al cargar la página
+		$.ajax({
+			url: "/api/songs/?_order=id",
+			success: function(response) {
+				$('.songs-list').html('');
+				for (var i in response) {
+				var song = response[i];
+
+				var coverUrl = song.cover_url || "";
+				if (coverUrl == "") {
+					coverUrl = "src/img/disc-placeholder.jpg";
+				}
+
+				var artist = song.artist || "";
+				var title = song.title || "";
+
+				var html = '<article class="song">';
+				html += '<img class="cover" src="' + coverUrl + '">';
+				html += '<img class="favorite-button" src="src/img/icon-heart.png" title="Add to favorites">';
+				html += '<div class="artist">' + utils.escapeHTML(artist) + '</div>';
+				html += '<div class="title">' + utils.escapeHTML(title) + '</div>';
+				html += '</article>';
+				$('.songs-list').append(html);
+				}
+			},
+			error: function(response) {
+				console.log('ERROR', response);
+			}
+		});
+	}
+}
+
+},{"./utils.js":7,"jquery":1}],7:[function(require,module,exports){
+var $ = require("jquery");
+
+module.exports = {
+	escapeHTML: function(str){
+		return $('<div>').text(str).html();
+	}
+}
+},{"jquery":1}]},{},[3]);

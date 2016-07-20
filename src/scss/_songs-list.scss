@@ -29,6 +29,14 @@
 				margin-bottom: 10px;
 			}
 		}
+		.favorite-button {
+			float: right;
+			margin: 20px 10px 0 0;
+			@include if-is-tablet {
+				float: none;
+				margin: 0px;
+			}
+		}
 		.artist {
 			margin-top: 15px;
 			font-weight: bold;
@@ -39,7 +47,9 @@
 			text-overflow: ellipsis;
 			overflow: hidden;
 			height: 16px;
-			padding-right: 20px;
+			@include if-is-tablet {
+				padding-right: 0px;
+			}
 		}
 	}
 }

@@ -6,6 +6,9 @@ body {
 
 	// Muestra el formulario
 	&.form-shown { 
+		.add-icon {
+			transform: rotate(45deg);
+		}
 		.new-song-form {
 			display: flex;
 		}

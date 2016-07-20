@@ -1,4 +1,5 @@
 var $ = require('jquery');
+var songList = require("./song-list");
 
 // Al enviar formulario enviamos peticion AJAX para almacenar la cancion
 $('.new-song-form').on('submit', function(){
@@ -37,6 +38,7 @@ $('.new-song-form').on('submit', function(){
 			console.log('SUCCESS', response);
 			$("form")[0].reset();  // borramos los campos del formulario
 			$("#artist").focus();  // pongo el foco en el campo artist
+			songList.load();
 		},
 		error: function() {
 			console.log('ERROR', response);

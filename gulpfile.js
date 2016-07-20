@@ -15,7 +15,8 @@ gulp.task('default', ["concat-js", "compile-sass"], function(){
 
 	// iniciar BrowserSync
 	browserSync.init({
-		server: "./"  // levanta un servidor web en la carpeta actual
+		// server: "./"  // levanta un servidor web en la carpeta actual
+		proxy: "127.0.0.1:8000"  // actua como proxy enviando peticiones a sparRest
 	});
 
 	// observa cambios en archivos sass y compila automaticamente
@@ -44,7 +45,7 @@ gulp.task('compile-sass', function(){
 gulp.task("concat-js", function(){
 	gulp.src("src/js/app.js")
 	.pipe(tap(function(file){  // tap ejecuta un codigo por cada fichero seleccionado en el paso anterior
-		file.contents = browserify(file.path, {debug:true}).bundle();  // pasamos el archivo por browserify para importar los require
+		file.contents = browserify(file.path).bundle();  // pasamos el archivo por browserify para importar los require
 	}))  
 	.pipe(buffer())  // convierte cada archivo en un stream
 	.pipe(gulp.dest("dist/js"))

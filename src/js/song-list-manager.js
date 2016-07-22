@@ -16,10 +16,11 @@ module.exports = {
 					coverUrl = "src/img/disc-placeholder.jpg";
 				}
 
+				var id = song.id || "";
 				var artist = song.artist || "";
 				var title = song.title || "";
 
-				var html = '<article class="song">';
+				var html = '<article class="song" data-id="' + id + '">';
 				html += '<img class="cover" src="' + coverUrl + '">';
 				html += '<img class="delete-button" src="src/img/icon-trash.png" title="Delete song">';
 				html += '<div class="artist">' + utils.escapeHTML(artist) + '</div>';
@@ -32,5 +33,18 @@ module.exports = {
 				console.log('ERROR', response);
 			}
 		});
+	},
+	delete: function(songId) {
+		var self = this;
+		$.ajax({
+			url: "/api/songs/" + songId,
+			method: "delete",
+			success: function(){
+				self.load();
+			},
+			error: function(response){
+				console.log("ERROR AL BORRAR CANCION", response);
+			}
+		})
 	}
 }

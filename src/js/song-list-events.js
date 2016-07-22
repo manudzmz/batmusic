@@ -1,5 +1,10 @@
 var $ = require('jquery');
+var songListManager = require("./song-list-manager");
 
 $(".songs-list").on('click', '.delete-button', function() {
-	console.log("BORRAR CANCION");
+	var songId = $(this).parent().data("id");
+	console.log("VOY A BORRAR LA CANCION", songId);
+	$(this).hide();
+	songListManager.delete(songId);
 });
+

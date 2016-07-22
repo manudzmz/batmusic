@@ -6,12 +6,16 @@ var browserSync = require('browser-sync').create();
 var browserify = require('browserify');
 var tap = require('gulp-tap');
 var buffer = require('gulp-buffer');
+var imagemin = require('gulp-imagemin');
+
 
 // variables de patrones de archivos
 var jsFiles = ["src/js/*.js", "src/js/**/*.js"];
+var uploadedImages = ['uploads/*.png', 'uploads/*.jpg', 'uploads/*.gif', 'uploads/*.svg'];
+var assetsImages = ['src/img/*.png', 'src/img/*.jpg', 'src/img/*.gif', 'src/img/*.svg'];
 
 // definimos la tarea por defecto
-gulp.task('default', ["concat-js", "compile-sass"], function(){
+gulp.task('default', ["concat-js", "compile-sass", "assets-images-optimization"], function(){
 
 	// iniciar BrowserSync
 	browserSync.init({
@@ -27,6 +31,9 @@ gulp.task('default', ["concat-js", "compile-sass"], function(){
 
 	// observa cambios en los archivos js para concatenar
 	gulp.watch(jsFiles, ['concat-js']);
+
+	// observa cambios en los assets para optimizarlos
+	gulp.watch(assetsImages, ['assets-images-optimization']);
 });
 
 // definimos la tarea para compilar Sass
@@ -54,4 +61,18 @@ gulp.task("concat-js", function(){
 		message: "Concatenado"
 	}))
 	.pipe(browserSync.stream());
+});
+
+// optimizacion de imagenes de usuario
+gulp.task("uploaded-images-optimization", function(){
+	gulp.src(uploadedImages)
+	.pipe(imagemin())
+	.pipe(gulp.dest("./uploads"));
+});
+
+// optimizacion de assets
+gulp.task("assets-images-optimization", function(){
+	gulp.src(assetsImages)
+	.pipe(imagemin())
+	.pipe(gulp.dest("./dist/img"));
 });

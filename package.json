@@ -12,6 +12,7 @@
     "browserify": "^13.0.1",
     "gulp": "^3.9.1",
     "gulp-buffer": "0.0.2",
+    "gulp-imagemin": "^3.0.2",
     "gulp-notify": "^2.2.0",
     "gulp-sass": "^2.3.2",
     "gulp-tap": "^0.1.3"

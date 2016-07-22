@@ -161,11 +161,12 @@ button {
       .songs-list .song .cover {
         width: 100%;
         margin-bottom: 10px; } }
-  .songs-list .song .favorite-button {
+  .songs-list .song .delete-button {
+    cursor: pointer;
     float: right;
     margin: 20px 10px 0 0; }
     @media all and (min-width: 737px) {
-      .songs-list .song .favorite-button {
+      .songs-list .song .delete-button {
         float: none;
         margin: 0px; } }
   .songs-list .song .artist {

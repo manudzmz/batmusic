@@ -10083,16 +10083,17 @@ $(".add-icon").on('click', function(){
 },{"jquery":1}],3:[function(require,module,exports){
 require("./form.js");
 require("./add-icon.js");
+require("./song-list-events.js");
 require("./init.js");
 
-},{"./add-icon.js":2,"./form.js":4,"./init.js":5}],4:[function(require,module,exports){
+},{"./add-icon.js":2,"./form.js":4,"./init.js":5,"./song-list-events.js":6}],4:[function(require,module,exports){
 var $ = require('jquery');
-var songList = require("./song-list");
+var songListManager = require("./song-list-manager");
 
 // Al enviar formulario enviamos peticion AJAX para almacenar la cancion
 $('.new-song-form').on('submit', function(){
-	console.log("Click en el boton");
 
+	//	Validacion de inputs
 	var inputs = $(".new-song-form input");
 	for (var i = 0; i < inputs.length; i++) {
 		var input = inputs[i];
@@ -10126,7 +10127,7 @@ $('.new-song-form').on('submit', function(){
 			console.log('SUCCESS', response);
 			$("form")[0].reset();  // borramos los campos del formulario
 			$("#artist").focus();  // pongo el foco en el campo artist
-			songList.load();
+			songListManager.load();
 		},
 		error: function() {
 			console.log('ERROR', response);
@@ -10139,12 +10140,18 @@ $('.new-song-form').on('submit', function(){
 
 	return false;  // e.preventDefault();
 });
-},{"./song-list":6,"jquery":1}],5:[function(require,module,exports){
-var songList = require("./song-list");
+},{"./song-list-manager":7,"jquery":1}],5:[function(require,module,exports){
+var songListManager = require("./song-list-manager");
 
 // cargamos la lista de canciones
-songList.load();
-},{"./song-list":6}],6:[function(require,module,exports){
+songListManager.load();
+},{"./song-list-manager":7}],6:[function(require,module,exports){
+var $ = require('jquery');
+
+$(".songs-list").on('click', '.delete-button', function() {
+	console.log("BORRAR CANCION");
+});
+},{"jquery":1}],7:[function(require,module,exports){
 var $ = require('jquery');
 var utils = require('./utils.js');
 
@@ -10168,7 +10175,7 @@ module.exports = {
 
 				var html = '<article class="song">';
 				html += '<img class="cover" src="' + coverUrl + '">';
-				html += '<img class="favorite-button" src="src/img/icon-heart.png" title="Add to favorites">';
+				html += '<img class="delete-button" src="src/img/icon-trash.png" title="Delete song">';
 				html += '<div class="artist">' + utils.escapeHTML(artist) + '</div>';
 				html += '<div class="title">' + utils.escapeHTML(title) + '</div>';
 				html += '</article>';
@@ -10182,7 +10189,7 @@ module.exports = {
 	}
 }
 
-},{"./utils.js":7,"jquery":1}],7:[function(require,module,exports){
+},{"./utils.js":8,"jquery":1}],8:[function(require,module,exports){
 var $ = require("jquery");
 
 module.exports = {

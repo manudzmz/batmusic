@@ -10081,12 +10081,45 @@ $(".add-icon").on('click', function(){
 	$('body').toggleClass('form-shown').toggleClass('song-list-shown');
 });
 },{"jquery":1}],3:[function(require,module,exports){
+var $ = require('jquery');
+
+module.exports = {
+	
+	save: function(song, successCallback, errorCallback) {
+		$.ajax({
+			url: '/api/songs',
+			method: 'post',
+			data: song,
+			success: successCallback,
+			error: errorCallback
+		});
+	},
+
+	delete: function(songId, successCallback, errorCallback) {
+		$.ajax({
+            url: '/api/songs' + songId,
+			method: 'delete',
+			success: successCallback,
+			error: errorCallback
+		});
+	},
+
+	list: function(successCallback, errorCallback) {
+		$.ajax({
+			url: '/api/songs',
+			method: 'get',
+			success: successCallback,
+			error: errorCallback
+		});
+	}
+}
+},{"jquery":1}],4:[function(require,module,exports){
 require("./form.js");
 require("./add-icon.js");
 require("./song-list-events.js");
 require("./init.js");
 
-},{"./add-icon.js":2,"./form.js":4,"./init.js":5,"./song-list-events.js":6}],4:[function(require,module,exports){
+},{"./add-icon.js":2,"./form.js":5,"./init.js":6,"./song-list-events.js":7}],5:[function(require,module,exports){
 var $ = require('jquery');
 var songListManager = require("./song-list-manager");
 
@@ -10140,24 +10173,33 @@ $('.new-song-form').on('submit', function(){
 
 	return false;  // e.preventDefault();
 });
-},{"./song-list-manager":7,"jquery":1}],5:[function(require,module,exports){
+},{"./song-list-manager":8,"jquery":1}],6:[function(require,module,exports){
 var songListManager = require("./song-list-manager");
 
 // cargamos la lista de canciones
 songListManager.load();
-},{"./song-list-manager":7}],6:[function(require,module,exports){
+},{"./song-list-manager":8}],7:[function(require,module,exports){
 var $ = require('jquery');
-var songListManager = require("./song-list-manager");
+var apiClient = require("./api-client");
 
 $(".songs-list").on('click', '.delete-button', function() {
+	var self = this;
 	var songId = $(this).parent().data("id");
 	console.log("VOY A BORRAR LA CANCION", songId);
 	$(this).hide();
-	songListManager.delete(songId);
+	apiClient.delete(songId, function(response){
+		$(self).parent().remove();
+	}, function(response){
+		alert("Error while deleting the song");
+	});
 });
 
-
-},{"./song-list-manager":7,"jquery":1}],7:[function(require,module,exports){
+$('.songs-list').on('click', '.song', function(){
+	var songId = $(this).data("id");
+	localStorage.setItem("lastSong", songId);
+	console.log("CANCION SELECCIONADA", songId);
+});
+},{"./api-client":3,"jquery":1}],8:[function(require,module,exports){
 var $ = require('jquery');
 var utils = require('./utils.js');
 
@@ -10209,7 +10251,7 @@ module.exports = {
 	}
 }
 
-},{"./utils.js":8,"jquery":1}],8:[function(require,module,exports){
+},{"./utils.js":9,"jquery":1}],9:[function(require,module,exports){
 var $ = require("jquery");
 
 module.exports = {
@@ -10217,4 +10259,4 @@ module.exports = {
 		return $('<div>').text(str).html();
 	}
 }
-},{"jquery":1}]},{},[3]);
+},{"jquery":1}]},{},[4]);

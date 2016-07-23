@@ -7,15 +7,16 @@ var browserify = require('browserify');
 var tap = require('gulp-tap');
 var buffer = require('gulp-buffer');
 var imagemin = require('gulp-imagemin');
+var spritesmith = require('gulp.spritesmith');
 
 
 // variables de patrones de archivos
 var jsFiles = ["src/js/*.js", "src/js/**/*.js"];
 var uploadedImages = ['uploads/*.png', 'uploads/*.jpg', 'uploads/*.gif', 'uploads/*.svg'];
-var assetsImages = ['src/img/*.png', 'src/img/*.jpg', 'src/img/*.gif', 'src/img/*.svg'];
+var spriteDir = ['src/img/sprites/*'];
 
 // definimos la tarea por defecto
-gulp.task('default', ["concat-js", "compile-sass", "assets-images-optimization"], function(){
+gulp.task('default', ["concat-js", "spritesheet", "compile-sass"], function(){
 
 	// iniciar BrowserSync
 	browserSync.init({
@@ -32,8 +33,8 @@ gulp.task('default', ["concat-js", "compile-sass", "assets-images-optimization"]
 	// observa cambios en los archivos js para concatenar
 	gulp.watch(jsFiles, ['concat-js']);
 
-	// observa cambios en los assets para optimizarlos
-	gulp.watch(assetsImages, ['assets-images-optimization']);
+	// observamos cambios en los spritesheets para regenerarlo automaticamente
+	gulp.watch(spriteDir, ['spritesheet']);
 });
 
 // definimos la tarea para compilar Sass
@@ -71,8 +72,14 @@ gulp.task("uploaded-images-optimization", function(){
 });
 
 // optimizacion de assets
-gulp.task("assets-images-optimization", function(){
-	gulp.src(assetsImages)
-	.pipe(imagemin())
-	.pipe(gulp.dest("./dist/img"));
+gulp.task("spritesheet", function(){
+	var spriteData = gulp.src(spriteDir)
+	.pipe(spritesmith({
+		imgName: 'sprite.png',
+		cssName: '_sprite.scss',
+		imgPath: '../img/sprite.png'
+	}));
+
+	spriteData.img.pipe(buffer()).pipe(imagemin()).pipe(gulp.dest('dist/img/'));
+	spriteData.css.pipe(gulp.dest("./src/scss"));
 });

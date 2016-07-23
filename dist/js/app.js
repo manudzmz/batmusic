@@ -10182,7 +10182,7 @@ module.exports = {
 
 				var html = '<article class="song" data-id="' + id + '">';
 				html += '<img class="cover" src="' + coverUrl + '">';
-				html += '<img class="delete-button" src="src/img/icon-trash.png" title="Delete song">';
+				html += '<span class="sprite icon-trash delete-button" title="Delete song"></span>';
 				html += '<div class="artist">' + utils.escapeHTML(artist) + '</div>';
 				html += '<div class="title">' + utils.escapeHTML(title) + '</div>';
 				html += '</article>';

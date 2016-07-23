@@ -1,14 +1,13 @@
 var $ = require('jquery');
+var apiClient = require('./api-client');
 var utils = require('./utils.js');
 
 module.exports = {
 	load: function() {
-		// peticion AJAX para cargar la lista de canciones al cargar la página
-		$.ajax({
-			url: "/api/songs/?_order=id",
-			success: function(response) {
-				$('.songs-list').html('');
-				for (var i in response) {
+
+		apiClient.list(function(response){
+			$('.songs-list').html('');
+			for (var i in response) {
 				var song = response[i];
 
 				var coverUrl = song.cover_url || "";
@@ -27,24 +26,10 @@ module.exports = {
 				html += '<div class="title">' + utils.escapeHTML(title) + '</div>';
 				html += '</article>';
 				$('.songs-list').append(html);
-				}
-			},
-			error: function(response) {
-				console.log('ERROR', response);
 			}
-		});
-	},
-	delete: function(songId) {
-		var self = this;
-		$.ajax({
-			url: "/api/songs/" + songId,
-			method: "delete",
-			success: function(){
-				self.load();
-			},
-			error: function(response){
-				console.log("ERROR AL BORRAR CANCION", response);
-			}
+		}, function(response){
+			console.log('ERROR', response);
 		})
-	}
+
+	},
 }

@@ -10087,7 +10087,7 @@ module.exports = {
 	
 	save: function(song, successCallback, errorCallback) {
 		$.ajax({
-			url: '/api/songs',
+			url: '/api/songs/',
 			method: 'post',
 			data: song,
 			success: successCallback,
@@ -10097,7 +10097,7 @@ module.exports = {
 
 	delete: function(songId, successCallback, errorCallback) {
 		$.ajax({
-            url: '/api/songs' + songId,
+            url: '/api/songs/' + songId,
 			method: 'delete',
 			success: successCallback,
 			error: errorCallback
@@ -10106,13 +10106,13 @@ module.exports = {
 
 	list: function(successCallback, errorCallback) {
 		$.ajax({
-			url: '/api/songs',
+			url: '/api/songs/',
 			method: 'get',
 			success: successCallback,
 			error: errorCallback
 		});
 	}
-}
+};
 },{"jquery":1}],4:[function(require,module,exports){
 require("./form.js");
 require("./add-icon.js");
@@ -10121,7 +10121,21 @@ require("./init.js");
 
 },{"./add-icon.js":2,"./form.js":5,"./init.js":6,"./song-list-events.js":7}],5:[function(require,module,exports){
 var $ = require('jquery');
-var songListManager = require("./song-list-manager");
+var apiClient = require('./api-client');
+var songListManager = require('./song-list-manager');
+
+var newSongFormButton = $('.new-song-form button');
+var inputs = $(".new-song-form input");
+
+function setLoading() {
+	$(inputs).attr("disabled", true);
+	newSongFormButton.text("Saving song...").attr("disabled", true);
+}
+
+function unsetLoading() {
+	$(inputs).attr("disabled", false);
+	newSongFormButton.text("Save song").attr("disabled", false);
+}
 
 // Al enviar formulario enviamos peticion AJAX para almacenar la cancion
 $('.new-song-form').on('submit', function(){
@@ -10137,43 +10151,29 @@ $('.new-song-form').on('submit', function(){
 		}
 	}
 
-
 	// cancion que quiero crear
-	song = {
+	var song = {
 		artist: $('#artist').val(),
 		title: $('#title').val(),
 		audio_url: $('#audio_url').val(),
 		cover_url: $('#cover_url').val()
-	}
+	};
 
-	// peticion AJAX para guardar la informacion en el backend
-	$.ajax({
-		url: '/api/songs',
-		method: 'post',
-		data: song,
-		beforeSend: function() {
-			$(inputs).attr("disabled", true);
-			$('.new-song-form button').text("Saving song...").attr("disabled", true);
-
-		},
-		success: function(response) {
-			console.log('SUCCESS', response);
-			$("form")[0].reset();  // borramos los campos del formulario
-			$("#artist").focus();  // pongo el foco en el campo artist
-			songListManager.load();
-		},
-		error: function() {
-			console.log('ERROR', response);
-		},
-		complete: function() {
-			$(inputs).attr("disabled", false);
-			$('.new-song-form button').text("Save song").attr("disabled", false);
-		}
+	setLoading(); // deshabilito el formulario
+	
+	apiClient.save(song, function(response){
+		$("form")[0].reset();  // borramos los campos del formulario
+		$("#artist").focus();  // pongo el foco en el campo artist
+		songListManager.load();
+		unsetLoading();
+	}, function(){
+		console.error('ERROR', response);
+		unsetLoading();
 	});
 
 	return false;  // e.preventDefault();
 });
-},{"./song-list-manager":8,"jquery":1}],6:[function(require,module,exports){
+},{"./api-client":3,"./song-list-manager":8,"jquery":1}],6:[function(require,module,exports){
 var songListManager = require("./song-list-manager");
 
 // cargamos la lista de canciones
@@ -10201,16 +10201,15 @@ $('.songs-list').on('click', '.song', function(){
 });
 },{"./api-client":3,"jquery":1}],8:[function(require,module,exports){
 var $ = require('jquery');
+var apiClient = require('./api-client');
 var utils = require('./utils.js');
 
 module.exports = {
 	load: function() {
-		// peticion AJAX para cargar la lista de canciones al cargar la página
-		$.ajax({
-			url: "/api/songs/?_order=id",
-			success: function(response) {
-				$('.songs-list').html('');
-				for (var i in response) {
+
+		apiClient.list(function(response){
+			$('.songs-list').html('');
+			for (var i in response) {
 				var song = response[i];
 
 				var coverUrl = song.cover_url || "";
@@ -10229,29 +10228,15 @@ module.exports = {
 				html += '<div class="title">' + utils.escapeHTML(title) + '</div>';
 				html += '</article>';
 				$('.songs-list').append(html);
-				}
-			},
-			error: function(response) {
-				console.log('ERROR', response);
 			}
-		});
-	},
-	delete: function(songId) {
-		var self = this;
-		$.ajax({
-			url: "/api/songs/" + songId,
-			method: "delete",
-			success: function(){
-				self.load();
-			},
-			error: function(response){
-				console.log("ERROR AL BORRAR CANCION", response);
-			}
+		}, function(response){
+			console.log('ERROR', response);
 		})
-	}
+
+	},
 }
 
-},{"./utils.js":9,"jquery":1}],9:[function(require,module,exports){
+},{"./api-client":3,"./utils.js":9,"jquery":1}],9:[function(require,module,exports){
 var $ = require("jquery");
 
 module.exports = {

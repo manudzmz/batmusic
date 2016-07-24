@@ -21,10 +21,10 @@
 		<input type="text" id="title" name="title" placeholder="Song title" required></div>
 
 		<div><label for="audio_url">Audio URL</label>
-		<input type="url" id="audio_url" name="audio_url" placeholder="http://..." required></div>
+		<input type="file" id="audio_file" name="audio_file" accept="audio/*" required></div>
 
-		<div><label for="cover_url">Cover URL</label>
-		<input type="url" id="cover_url" name="cover_url" placeholder="http://..."></div>
+		<div><label for="cover_url">Cover URL (optional)</label>
+		<input type="file" id="cover_file" name="cover_file" accept="image/*"></div>
 
 		<button>Save song</button>
 	</form>

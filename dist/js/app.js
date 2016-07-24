@@ -10086,10 +10086,22 @@ var $ = require('jquery');
 module.exports = {
 	
 	save: function(song, successCallback, errorCallback) {
+
+		var formData = new FormData();
+		formData.append("artist", song.artist);
+        formData.append("title", song.title);
+        formData.append("audio_url", song.audio_file);
+        if (song.cover_file)
+            formData.append("cover_url", song.cover_file);
+        else
+            formData.append("cover_url", "");
+
 		$.ajax({
 			url: '/api/songs/',
 			method: 'post',
-			data: song,
+			data: formData,
+			processData: false,
+			contentType: false,
 			success: successCallback,
 			error: errorCallback
 		});
@@ -10150,17 +10162,31 @@ $('.new-song-form').on('submit', function(){
 			return false;
 		}
 	}
+	debugger;
+	var audio_file_input = $('#audio_file')[0];
+	var audio_file = null;
+	if (audio_file_input.files.length > 0) {
+		audio_file = audio_file_input.files[0];
+	}
+
+	var cover_file_input = $('#cover_file')[0];
+	var cover_file = null;
+	if (cover_file_input.files.length > 0) {
+		cover_file = cover_file_input.files[0];
+	}
 
 	// cancion que quiero crear
 	var song = {
 		artist: $('#artist').val(),
 		title: $('#title').val(),
-		audio_url: $('#audio_url').val(),
-		cover_url: $('#cover_url').val()
+		audio_file: audio_file,
+		cover_file: cover_file
+		// audio_url: $('#audio_url').val(),
+		// cover_url: $('#cover_url').val()
 	};
 
 	setLoading(); // deshabilito el formulario
-	
+
 	apiClient.save(song, function(response){
 		$("form")[0].reset();  // borramos los campos del formulario
 		$("#artist").focus();  // pongo el foco en el campo artist
@@ -10172,6 +10198,18 @@ $('.new-song-form').on('submit', function(){
 	});
 
 	return false;  // e.preventDefault();
+});
+
+
+// detectamos seleccion de archivos
+$('input[type="file"]').on('change', function(){
+	var reader = new FileReader();
+	reader.onload = function (){
+		var img = $('<img>');
+		img.attr('src', reader.result);
+		//$('body').append(img);
+	};
+	reader.readAsDataURL(this.files[0]);
 });
 },{"./api-client":3,"./song-list-manager":8,"jquery":1}],6:[function(require,module,exports){
 var songListManager = require("./song-list-manager");

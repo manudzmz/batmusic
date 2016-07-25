@@ -6,6 +6,11 @@ var browserSync = require('browser-sync').create();
 var browserify = require('browserify');
 var tap = require('gulp-tap');
 var buffer = require('gulp-buffer');
+var uglify = require('gulp-uglify');
+var sourcemaps = require('gulp-sourcemaps');
+var postcss = require('gulp-postcss');
+var autoprefixer = require('autoprefixer');
+var cssnano = require('cssnano');
 var imagemin = require('gulp-imagemin');
 var spritesmith = require('gulp.spritesmith');
 
@@ -39,9 +44,12 @@ gulp.task('default', ["concat-js", "spritesheet", "compile-sass"], function(){
 
 // definimos la tarea para compilar Sass
 gulp.task('compile-sass', function(){
-	gulp.src('./src/scss/style.scss')         // cargamos el archivo
-	.pipe(sass().on('error', sass.logError))  // compilamos el archivo sass
-	.pipe(gulp.dest('./dist/css'))            // guardamos el archivo en dist/css
+	gulp.src('./src/scss/style.scss')           // cargamos el archivo
+	.pipe(sass().on('error', sass.logError))    // compilamos el archivo sass
+	.pipe(sourcemaps.init())                    // comenzamos la captura de sourcemaps
+	.pipe(postcss([autoprefixer(), cssnano()])) // autoprefija y minifica el CSS
+	.pipe(sourcemaps.write('./'))                   // escribimos los sourcemaps
+	.pipe(gulp.dest('./dist/css'))              // guardamos el archivo en dist/css
 	.pipe(notify({
 		title: "SASS",
 		message: "Compilado"
@@ -52,10 +60,13 @@ gulp.task('compile-sass', function(){
 // definimos la tarea para concatenar js
 gulp.task("concat-js", function(){
 	gulp.src("src/js/app.js")
+	.pipe(sourcemaps.init())
 	.pipe(tap(function(file){  // tap ejecuta un codigo por cada fichero seleccionado en el paso anterior
 		file.contents = browserify(file.path).bundle();  // pasamos el archivo por browserify para importar los require
 	}))  
 	.pipe(buffer())  // convierte cada archivo en un stream
+	.pipe(uglify())  // minifica el archivo js
+	.pipe(sourcemaps.write('./'))  // escribimos los sourcemaps
 	.pipe(gulp.dest("dist/js"))
 	.pipe(notify({
 		title: "JS",

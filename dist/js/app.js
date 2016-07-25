@@ -10153,7 +10153,7 @@ function unsetLoading() {
 $('.new-song-form').on('submit', function(){
 
 	//	Validacion de inputs
-	var inputs = $(".new-song-form input");
+	var inputs = $(".new-song-form").find("input, .drop-zone");
 	for (var i = 0; i < inputs.length; i++) {
 		var input = inputs[i];
 		if (input.checkValidity() == false){
@@ -10165,14 +10165,14 @@ $('.new-song-form').on('submit', function(){
 	
 	var audio_file_input = $('#audio_file')[0];
 	var audio_file = null;
-	if (audio_file_input.files.length > 0) {
-		audio_file = audio_file_input.files[0];
+	if (audio_file_input.file != null) {
+		audio_file = audio_file_input.file;
 	}
 
 	var cover_file_input = $('#cover_file')[0];
 	var cover_file = null;
-	if (cover_file_input.files.length > 0) {
-		cover_file = cover_file_input.files[0];
+	if (cover_file_input.file != null) {
+		cover_file = cover_file_input.file;
 	}
 
 	// cancion que quiero crear
@@ -10214,23 +10214,45 @@ $('input[type="file"]').on('change', function(){
 
 
 // anulamos el comportamiento por defecto del navegador en el drop
-$('body').on('drop dragover', function(e){
-	console.log("BODY DROP O DRAGOVER");
-	e.preventDefault();
-	return false;
-});
+// $('body').on('drop dragover', function(e){
+// 	e.preventDefault();
+// 	return false;
+// });
 
-$('.drop-zone').on('dragover', function(e){
-	console.log("DRAG OVER DROP ZONE", e);
-	e.preventDefault();
-	return false;
-});
 
-// manejar eventos de drag & drop
-$('.drop-zone').on('drop', function(e){
-	console.log('ALGUIEN HA HECHO DROP EN DROP ZONE', e);
+// manejamos el evento de cuando ponen el archivo encima
+$('.drop-zone').on('dragover dragleave', function(e){
+	e.preventDefault();
+	if (e.type == "dragover"){
+		$(this).addClass('drop-here');
+	} else {
+		$(this).removeClass('drop-here');
+	}
+	return false;
+
+}).on('drop', function(e){   // manejamos el evento de cuando sueltan el archivo
+	var files = e.originalEvent.dataTransfer.files;
+	if (files.length > 0){
+		var file = files[0];
+		$(this).text(file.name);
+		this.file = file; 
+	}
 	e.preventDefault();
 	return false; //prevent default
+
+}).each(function(){
+	var self = this;
+
+	this.file = null;  // creamos un atributo file en el div.drop-zone con valor null
+
+	this.validationMessage = "Invalid file type";
+
+	this.checkValidity = function (){
+		// si el atributo file no es null y el tipo de archivo coincide con el valor de la expresion
+		// regular del atributo filetype, entonces es valido
+		var regexp = $(self).attr("filetype");
+		return self.file != null && self.file.type.match(regexp);
+	};
 });
 },{"./api-client":3,"./song-list-manager":8,"jquery":1}],6:[function(require,module,exports){
 var songListManager = require("./song-list-manager");

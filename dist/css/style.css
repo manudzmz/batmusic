@@ -163,13 +163,13 @@ button {
     color: #fff; }
 
 .drop-zone {
-  background-color: red;
+  background-color: #EBEDEA;
   text-align: center;
   text-transform: uppercase;
   transition: all 0.25s;
   font-size: 11px; }
   .drop-zone.drop-here {
-    background: #d9f2ea; }
+    background-color: #d9f2ea; }
 
 *::selection {
   background: #FCF3CE; }
@@ -240,7 +240,7 @@ body .ui-element {
   display: none; }
 
 body.form-shown .add-icon {
-  transform: rotate(45deg); }
+  transform: rotate(135deg); }
 
 body.form-shown .new-song-form {
   display: flex; }

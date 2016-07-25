@@ -78,6 +78,21 @@ button {
 	}
 }
 
+
+//Mover este estilo a un partial aparte
+.drop-zone {
+	@extend input;
+	//background-color:$color-grey;
+	background-color:red;
+	text-align: center;
+	text-transform: uppercase;
+	transition: all 0.25s;
+	font-size: $font-size-small;
+	&.drop-here {
+		background: lighten($color-sirena, 20%);
+	}	
+}
+
 *::selection {
 	background: $color-ivory-ish;
 }

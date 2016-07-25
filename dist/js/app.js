@@ -10162,7 +10162,7 @@ $('.new-song-form').on('submit', function(){
 			return false;
 		}
 	}
-	debugger;
+	
 	var audio_file_input = $('#audio_file')[0];
 	var audio_file = null;
 	if (audio_file_input.files.length > 0) {
@@ -10210,6 +10210,27 @@ $('input[type="file"]').on('change', function(){
 		//$('body').append(img);
 	};
 	reader.readAsDataURL(this.files[0]);
+});
+
+
+// anulamos el comportamiento por defecto del navegador en el drop
+$('body').on('drop dragover', function(e){
+	console.log("BODY DROP O DRAGOVER");
+	e.preventDefault();
+	return false;
+});
+
+$('.drop-zone').on('dragover', function(e){
+	console.log("DRAG OVER DROP ZONE", e);
+	e.preventDefault();
+	return false;
+});
+
+// manejar eventos de drag & drop
+$('.drop-zone').on('drop', function(e){
+	console.log('ALGUIEN HA HECHO DROP EN DROP ZONE', e);
+	e.preventDefault();
+	return false; //prevent default
 });
 },{"./api-client":3,"./song-list-manager":8,"jquery":1}],6:[function(require,module,exports){
 var songListManager = require("./song-list-manager");
